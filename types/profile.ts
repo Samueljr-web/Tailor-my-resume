@@ -1,21 +1,33 @@
 export interface WorkExperience {
-  position: string;
-  companyName: string;
+  Position: string;
+  CompanyName: string;
+  startDate: string;
+  endDate: string;
 }
 
 export interface Education {
   programme: string;
   school: string;
 }
-export interface Skill {
+
+export interface Languages {
   name: string;
+}
+export interface Skill {
+  [category: string]: string[];
 }
 
 export interface Profile {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   address: string;
-  linkedin: string;
-  yearsOfExperience: number;
-  skills: Skill[];
+  jobTitle: string;
+  linkedinUrl: string;
   workExperience: WorkExperience[];
-  education: Education[];
+  skills: Skill[];
+  yearsOfExperience: number;
+  phoneNumber: string;
+  education: Education;
 }
