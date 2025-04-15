@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Spinner from "../components/spinner";
 
 type SignUpProps = {
   firstName: string;
@@ -22,15 +23,17 @@ function Page() {
     formState: { errors },
   } = useForm<SignUpProps>();
   const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
 
   const onSubmit: SubmitHandler<SignUpProps> = async (data) => {
-    console.log(data);
+    setLoading(true);
     try {
       const res = await apiClient.post("/auth/register", data);
-      console.log(res);
+
       if (res.status === 200 || res.status === 201) {
         toast.success("Signed up successfully");
         router.push("/signin");
+        setLoading(false);
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError && error.response?.status === 400) {
@@ -39,6 +42,7 @@ function Page() {
       } else {
         console.log("error", error);
       }
+      setLoading(false);
     }
   };
 
@@ -106,8 +110,11 @@ function Page() {
               <div>{errors.password.message}</div>
             )}
           </div>
-          <button className="cursor-pointer w-[300px] mt-4 bg-[#1F2937] p-2 text-white">
-            Sign up
+          <button
+            disabled={loading}
+            className="flex justify-center cursor-pointer w-[300px] mt-4 bg-[#1F2937] p-2 text-white disabled:opacity-70"
+          >
+            {loading ? <Spinner /> : "Sign up"}
           </button>
           <h2>
             dont have an account?{" "}

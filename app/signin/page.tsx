@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Spinner from "../components/spinner";
 
 type SignInProps = {
   email: string;
@@ -21,14 +22,17 @@ function Page() {
   } = useForm<SignInProps>();
   const searchParams = useSearchParams();
   const router = useRouter();
-
   const setAuthState = useAuthStore((state) => state.setAuthState);
+  const [loading, setLoading] = React.useState(false);
+
   const onSubmit: SubmitHandler<SignInProps> = async (data) => {
+    setLoading(true);
     try {
       const res = await apiClient.post("/auth/login", data);
       if (res.status === 200) {
         toast.success("Signed in successfully");
         const { data } = res;
+        setLoading(false);
         setAuthState({
           isAuthenticated: true,
           user: data,
@@ -45,6 +49,7 @@ function Page() {
         console.log("error:", error);
         toast.error("Something went wrong");
       }
+      setLoading(false);
     }
   };
 
@@ -78,8 +83,11 @@ function Page() {
               <p>All fields are required</p>
             )}
           </div>
-          <button className="cursor-pointer w-[300px] mt-4 bg-[#1F2937] p-2 text-white">
-            Sign in
+          <button
+            disabled={loading}
+            className="cursor-pointer flex items-center justify-center w-[300px] mt-4 bg-[#1F2937] p-2 text-white disabled:opacity-70"
+          >
+            {loading ? <Spinner /> : "Sign in"}
           </button>{" "}
           <h2>
             dont have an account?{" "}
