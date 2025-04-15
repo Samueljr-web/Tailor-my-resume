@@ -1,336 +1,143 @@
-import { useEffect, useState } from "react";
-import type { Profile, WorkExperience, Education } from "@/types/profile";
+"use client";
+
+import Breadcrumb from "@/app/components/breadCrumb";
 import withAuth from "@/app/components/withAuth";
 import apiClient from "@/lib/interceptor/api-client";
-import { AxiosError } from "axios";
 import useProfileStore from "@/store/useProfileStore";
+import Link from "next/link";
+import React, { useEffect } from "react";
+import { BiEdit } from "react-icons/bi";
 
-function ProfilePage() {
-  const [editMode, setEditMode] = useState<boolean>(false);
-  const profile = useProfileStore((state) => state.getProfile());
-  const setProfile = useProfileStore((state) => state.setProfile);
-
-  const handleChange = (field: keyof Profile, value: string | number) => {
-    if (!profile) return;
-    setProfile({ ...profile, [field]: value });
-  };
-
-  const handleArrayChange = (
-    section: "workExperience" | "education" | "skills",
-    index: number,
-    field: string,
-    value: string
-  ) => {
-    if (!profile) return;
-    const updatedArray = [...(profile[section] || [])] as any[];
-    updatedArray[index][field] = value;
-    setProfile({ ...profile, [section]: updatedArray });
-  };
-
-  const handleAdd = (
-    section: "workExperience" | "education" | "skills",
-    newItem: WorkExperience | Education | { name: string }
-  ) => {
-    if (!profile) return;
-    setProfile({
-      ...profile,
-      [section]: [...(profile[section] || []), newItem],
+function ProfileView() {
+  const { _hasHydrated, profile, setProfile } = useProfileStore();
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
-
-  const handleRemove = (
-    section: "workExperience" | "education" | "skills",
-    index: number
-  ) => {
-    if (!profile) return;
-    const updatedArray = [...(profile[section] || [])];
-    updatedArray.splice(index, 1);
-    setProfile({ ...profile, [section]: updatedArray });
-  };
-
+  const breadcrumbPaths = [{ name: "Home", link: "/" }, { name: "Profile" }];
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await apiClient("/profile");
+        const res = await apiClient.get("/profile");
         if (res.status === 200) {
+          console.log(res.data);
           setProfile(res.data);
         }
-      } catch (error: unknown) {
-        if (error instanceof AxiosError && error.response?.status === 401) {
-          console.log("Unauthorized");
-        } else {
-          console.error("Error fetching profile:", error);
-        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
       }
     };
-
     fetchProfile();
   }, [setProfile]);
 
-  if (!profile) return <p className="text-center mt-8">Loading profile...</p>;
-
+  if (!_hasHydrated) {
+    return null;
+  }
+  if (!profile) {
+    return <div className="text-center mt-10">Loading...</div>;
+  }
   return (
-    <div className="max-w-4xl mx-auto">
-      {" "}
-      <h2 className="font-medium text-3xl m-5">Profile</h2>
-      <section className=" p-6 bg-white rounded-xl shadow-md">
-        {/* Header */}
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="ml-5 my-4 flex justify-between">
+        <Breadcrumb paths={breadcrumbPaths} />
+        <Link href={"/generate"} className="py-2 px-2 bg-[#1F2937] text-white">
+          Generate
+        </Link>
+      </div>
 
-        <div className="flex justify-between items-start mb-6 flex-wrap gap-4">
-          <div>
-            <p className="text-gray-600 mt-1">
-              📍{" "}
-              {editMode ? (
-                <input
-                  type="text"
-                  value={profile.address}
-                  onChange={(e) => handleChange("address", e.target.value)}
-                  className="border-b border-gray-300"
-                />
-              ) : (
-                profile.address
-              )}
-            </p>
+      <div className="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow">
+        <div className="flex justify-between">
+          <h1 className="text-2xl font-bold ">Profile</h1>
+          <Link href={"/profile/edit"}>
+            <button className="bg-blue-500 text-white px-4 py-2 ">
+              <BiEdit />
+            </button>
+          </Link>
+        </div>
 
-            <p className="text-gray-600">
-              🧠{" "}
-              {editMode ? (
-                <input
-                  type="number"
-                  value={profile.yearsOfExperience}
-                  onChange={(e) =>
-                    handleChange("yearsOfExperience", e.target.value)
-                  }
-                  className="border-b border-gray-300 w-16"
-                />
-              ) : (
-                `${profile.yearsOfExperience}+ Years Experience`
-              )}
-            </p>
+        <h2 className="text-xl capitalize mt-3">{profile?.jobTitle}</h2>
 
-            {editMode ? (
-              <input
-                type="text"
-                value={profile.linkedin}
-                onChange={(e) => handleChange("linkedin", e.target.value)}
-                className="text-blue-500 border-b border-gray-300 w-full mt-1"
-              />
-            ) : (
-              <a
-                href={profile.linkedin}
+        <div className="my-5">
+          <h2 className="text-xl  text-[#111827] font-medium">
+            Personal Details
+          </h2>
+
+          <div className="mt-5 flex flex-col gap-3">
+            <h2>{profile?.email || "email"}</h2>
+            <h2>{profile?.address || "address"}</h2>
+            <h2>
+              <Link
+                className="text-blue-500"
                 target="_blank"
-                rel="noreferrer"
-                className="text-blue-500 hover:underline block mt-1"
+                href={`https://${profile?.linkedinUrl || "linkedin.com/in/"}`}
               >
-                LinkedIn Profile
-              </a>
-            )}
+                {profile?.linkedinUrl || "https://linkedin.com/in/"}
+              </Link>
+            </h2>
+
+            <h2>{profile?.yearsOfExperience || 0}+ Years Experience</h2>
           </div>
-
-          {/* Edit Toggle */}
-          <button
-            onClick={() => setEditMode(!editMode)}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
-          >
-            {editMode ? "Save" : "Edit"}
-          </button>
         </div>
-
+        <hr />
         {/* Skills */}
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">Skills</h3>
-
-          <ul className={editMode ? "" : "flex gap-2 flex-wrap"}>
-            {profile.skills.map((skill, index) => (
-              <li key={index} className="flex items-center justify-between ">
-                {editMode ? (
-                  <div className="flex flex-col gap-2 space-y-4">
-                    <input
-                      type="text"
-                      value={skill.name}
-                      onChange={(e) =>
-                        handleArrayChange(
-                          "skills",
-                          index,
-                          "name",
-                          e.target.value
-                        )
-                      }
-                      className="border p-2 rounded"
-                    />
-                    <button
-                      onClick={() => handleRemove("skills", index)}
-                      className="text-red-500 text-sm mt-1"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex">
-                    <span>
-                      {skill.name} {index < profile.skills.length - 1 && " | "}{" "}
-                    </span>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          {editMode && (
-            <button
-              onClick={() => handleAdd("skills", { name: "" })}
-              className="text-blue-500 mt-2"
-            >
-              + Add Skill
-            </button>
-          )}
+        <div className="mt-5">
+          <h2 className="text-xl text-[#111827] font-medium">Skills</h2>
+          <div className="my-4">
+            {profile?.skills.map((skill, index) => {
+              const category = Object.keys(skill)[0];
+              const techSkill = skill[category];
+              return (
+                <div key={index} className="mt-4">
+                  <h2 className="text-md font-medium capitalize">{category}</h2>
+                  <div className="flex gap-2 mr-4">{techSkill.join(",")}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-
+        <hr />
         {/* Work Experience */}
-        <div className="my-6">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">
+        <div className="mt-5">
+          <h2 className="text-xl text-[#111827] font-medium">
             Work Experience
-          </h3>
-          <ul className="space-y-4">
-            {profile.workExperience.map((job, index) => (
-              <li key={index} className="border-b pb-4">
-                {editMode ? (
-                  <div className="grid md:grid-cols-2 gap-2">
-                    <input
-                      type="text"
-                      placeholder="Job Position"
-                      value={job.position}
-                      onChange={(e) =>
-                        handleArrayChange(
-                          "workExperience",
-                          index,
-                          "position",
-                          e.target.value
-                        )
-                      }
-                      className="border p-2 rounded"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Company Name"
-                      value={job.companyName}
-                      onChange={(e) =>
-                        handleArrayChange(
-                          "workExperience",
-                          index,
-                          "companyName",
-                          e.target.value
-                        )
-                      }
-                      className="border p-2 rounded"
-                    />
-
-                    <button
-                      onClick={() => handleRemove("workExperience", index)}
-                      className="text-red-500 text-sm mt-1"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <h4 className="text-lg font-medium text-gray-900">
-                      {job.position}
-                    </h4>
-                    <p className="text-sm text-gray-700">{job.companyName}</p>
-                  </>
-                )}
-              </li>
+          </h2>
+          <div className="my-4">
+            {profile?.workExperience.map((work, index) => (
+              <div key={index} className="mt-4">
+                <h2 className="text-lg font-medium capitalize">
+                  {work.Position}
+                </h2>
+                <h2>{work.CompanyName}</h2>
+                <div>
+                  {formatDate(work.startDate)} -{" "}
+                  {work.endDate ? formatDate(work.endDate) : "Present"}
+                </div>
+                <hr className="mt-2" />
+              </div>
             ))}
-          </ul>
-
-          {editMode && (
-            <button
-              onClick={() =>
-                handleAdd("workExperience", {
-                  position: "",
-                  companyName: "",
-                })
-              }
-              className="text-blue-500 mt-2"
-            >
-              + Add Work Experience
-            </button>
-          )}
+          </div>
         </div>
-
         {/* Education */}
-        <div>
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">
-            Education
-          </h3>
-          <ul className="space-y-4">
-            {profile?.education.map((edu, index) => (
-              <li key={index} className="border-b pb-4">
-                {editMode ? (
-                  <div className="grid md:grid-cols-2 gap-2">
-                    <input
-                      type="text"
-                      placeholder="Degree"
-                      value={edu.programme}
-                      onChange={(e) =>
-                        handleArrayChange(
-                          "education",
-                          index,
-                          "programme",
-                          e.target.value
-                        )
-                      }
-                      className="border p-2 rounded"
-                    />
-                    <input
-                      type="text"
-                      placeholder="School"
-                      value={edu.school}
-                      onChange={(e) =>
-                        handleArrayChange(
-                          "education",
-                          index,
-                          "school",
-                          e.target.value
-                        )
-                      }
-                      className="border p-2 rounded"
-                    />
-
-                    <button
-                      onClick={() => handleRemove("education", index)}
-                      className="text-red-500 text-sm mt-1"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <h4 className="text-lg font-medium text-gray-900">
-                      {edu.programme}
-                    </h4>
-                    <p className="text-sm text-gray-700">{edu.school}</p>
-                  </>
-                )}
-              </li>
+        <div className="mt-5">
+          <h2 className="text-xl text-[#111827] font-medium">Education</h2>
+          <div>
+            {[profile?.education].map((edu, index) => (
+              <div key={index} className="mt-4">
+                <h2 className="text-lg font-medium capitalize">
+                  {edu?.programme}
+                </h2>
+                <h2>{edu?.school}</h2>
+              </div>
             ))}
-          </ul>
-
-          {editMode && (
-            <button
-              onClick={() =>
-                handleAdd("education", { programme: "", school: "" })
-              }
-              className="text-blue-500 mt-2"
-            >
-              + Add Education
-            </button>
-          )}
+          </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
 
-export default withAuth(ProfilePage);
+export default withAuth(ProfileView);
