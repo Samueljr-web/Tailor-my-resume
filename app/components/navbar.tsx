@@ -1,22 +1,31 @@
 "use client";
 
 import useAuthStore from "@/store/useAuthStore";
+import useProfileStore from "@/store/useProfileStore";
 import Link from "next/link";
 import React from "react";
 import { BiUserCircle } from "react-icons/bi";
 import { MdLogout } from "react-icons/md";
 
 export default function NavBar() {
-  const { _hasHydrated, isAuthenticated, user, logout } = useAuthStore();
+  const { _hasHydrated, isAuthenticated, logout } = useAuthStore();
+  const setProfile = useProfileStore((state) => state.setProfile);
 
   if (!_hasHydrated) {
     return null;
   }
+  const onLogout = () => {
+    logout();
+    setProfile(undefined);
+  };
 
   return (
     <div className="flex items-center justify-between py-4 px-5">
       <div>
-        <h2 className="text-[#111827] text-2xl font-bold">Resumee</h2>
+        <Link href={"/"}>
+          {" "}
+          <h2 className="text-[#111827] text-2xl font-bold">ResuTailor</h2>
+        </Link>
       </div>
 
       <nav className="hidden md:flex items-center gap-5">
@@ -28,15 +37,15 @@ export default function NavBar() {
       <div>
         {isAuthenticated && (
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-700 hidden md:block">
+            {/* <span className="text-sm text-gray-700 hidden md:block">
               {user?.email}
-            </span>
+            </span> */}
             <Link href={"/profile"}>
               <span>
                 <BiUserCircle className="text-3xl" />
               </span>
             </Link>
-            <button onClick={logout} className=" text-red-500">
+            <button onClick={() => onLogout()} className=" text-red-500">
               <MdLogout />
             </button>
           </div>
