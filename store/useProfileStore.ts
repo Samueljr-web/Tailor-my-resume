@@ -1,28 +1,31 @@
+import { Profile } from "@/types/profile";
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-export interface Profile {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  linkedin: string;
-  workExperience: string[];
-  skills: string[];
-  yearsOfExperience: number;
-  phoneNumber: string;
-  education: string[];
-}
 interface ProfileStore {
   profile: Profile | null;
-  setProfile: (profile: Profile) => void;
+  setProfile: (profile: Profile | undefined) => void;
   getProfile: () => Profile | null;
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
 }
 
-const useProfileStore = create<ProfileStore>((set, get) => ({
-  profile: null,
-  setProfile: (profile) => set({ profile }),
-  getProfile: () => get().profile,
-}));
+const useProfileStore = create(
+  persist<ProfileStore>(
+    (set, get) => ({
+      profile: null,
+      _hasHydrated: false,
+      setProfile: (profile) => set({ profile }),
+      getProfile: () => get().profile,
+      setHasHydrated: (state) => set({ _hasHydrated: state }),
+    }),
+    {
+      name: "userProfile",
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
+    }
+  )
+);
 
 export default useProfileStore;
