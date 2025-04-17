@@ -25,8 +25,8 @@ function Generate() {
         const { fileUrl } = res.data;
         const a = document.createElement("a");
         a.href = fileUrl;
-        // a.setAttribute("target", "_blank");
-        // a.setAttribute("rel", "noopener noreferrer");
+        a.setAttribute("target", "_blank");
+        a.setAttribute("rel", "noopener noreferrer");
         a.download = `${data.role}-${data.companyName}.pdf`;
         document.body.appendChild(a);
         a.click();
