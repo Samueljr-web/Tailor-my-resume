@@ -5,7 +5,7 @@ import useAuthStore from "@/store/useAuthStore";
 import { AxiosError } from "axios";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Spinner from "../components/spinner";
@@ -14,7 +14,8 @@ type SignInProps = {
   email: string;
   password: string;
 };
-function Page() {
+
+function SignIn() {
   const {
     register,
     handleSubmit,
@@ -32,23 +33,20 @@ function Page() {
       if (res.status === 200) {
         toast.success("Signed in successfully");
         const { data } = res;
-        setLoading(false);
         setAuthState({
           isAuthenticated: true,
           user: data,
         });
         const redirectTo = searchParams.get("redirectTo");
-        console.log("Redirecting to:", redirectTo);
         router.push(redirectTo || "/generate");
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError && error.response?.status === 401) {
-        console.log("error:", error.response.data.message);
         toast.error("Invalid credentials");
       } else {
-        console.log("error:", error);
         toast.error("Something went wrong");
       }
+    } finally {
       setLoading(false);
     }
   };
@@ -59,7 +57,7 @@ function Page() {
       <div className="mt-10">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-center flex-col "
+          className="flex items-center justify-center flex-col"
         >
           <input
             className="p-2 w-[300px] border"
@@ -76,7 +74,7 @@ function Page() {
             {...register("password", {
               required: "Password is required",
             })}
-          />{" "}
+          />
           <div className="w-[300px] mt-2 text-left text-red-500 text-sm">
             {(errors.email?.type === "required" ||
               errors.password?.type === "required") && (
@@ -88,9 +86,9 @@ function Page() {
             className="cursor-pointer flex items-center justify-center w-[300px] mt-4 bg-[#1F2937] p-2 text-white disabled:opacity-70"
           >
             {loading ? <Spinner /> : "Sign in"}
-          </button>{" "}
-          <h2>
-            dont have an account?{" "}
+          </button>
+          <h2 className="mt-2">
+            Don’t have an account?{" "}
             <Link className="underline" href={"/signup"}>
               Signup
             </Link>
@@ -101,4 +99,10 @@ function Page() {
   );
 }
 
-export default Page;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignIn />
+    </Suspense>
+  );
+}
