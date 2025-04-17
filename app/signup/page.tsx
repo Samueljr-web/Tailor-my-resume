@@ -41,6 +41,7 @@ function Page() {
         toast.error("A user with this email already exists");
       } else {
         console.log("error", error);
+        toast.error("Something went wrong");
       }
       setLoading(false);
     }
