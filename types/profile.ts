@@ -9,6 +9,10 @@ export interface Education {
   programme: string;
   school: string;
 }
+export interface Certificate {
+  name: string;
+  url: string;
+}
 
 export interface Languages {
   name: string;
@@ -25,9 +29,11 @@ export interface Profile {
   address: string;
   jobTitle: string;
   linkedinUrl: string;
+  portfolioUrl: string;
   workExperience: WorkExperience[];
-  skills: Skill[];
+  skills: Skill[] | string[];
   yearsOfExperience: number;
   phoneNumber: string;
   education: Education;
+  certifications: Certificate[];
 }
