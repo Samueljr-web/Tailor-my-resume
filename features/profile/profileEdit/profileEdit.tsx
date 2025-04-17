@@ -11,6 +11,7 @@ import { BiX } from "react-icons/bi";
 import SkillsSection from "./skillsSection";
 import ProfileSkeleton from "./profileSkeleton";
 import Breadcrumb from "@/app/components/breadCrumb";
+import CertificateSection from "./certificateSection";
 
 function ProfileEdit() {
   const { _hasHydrated, profile, setProfile } = useProfileStore();
@@ -66,6 +67,12 @@ function ProfileEdit() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!profile.jobTitle || !profile.yearsOfExperience) {
+      toast.error("Job Title and Years of Experience are required.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -141,6 +148,14 @@ function ProfileEdit() {
               value={profile.yearsOfExperience}
               onChange={handleInputChange}
               placeholder="Years Of Experience"
+            />
+            <input
+              className="input outline-none border"
+              type="text"
+              name="portfolioUrl"
+              value={profile.portfolioUrl}
+              onChange={handleInputChange}
+              placeholder="Portfolio URL"
             />
           </div>
 
@@ -230,9 +245,6 @@ function ProfileEdit() {
 
           <div>
             <h2 className="text-2xl font-bold mb-4">Education</h2>
-            {[profile?.education].map((edu, index) => (
-              <div key={index} className="mt-4"></div>
-            ))}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
@@ -268,6 +280,13 @@ function ProfileEdit() {
               />
             </div>
           </div>
+
+          <CertificateSection
+            certificate={profile.certifications}
+            setCertificate={(newCert) =>
+              setProfile({ ...profile, certifications: newCert })
+            }
+          />
 
           <button
             type="submit"

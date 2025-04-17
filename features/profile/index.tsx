@@ -86,17 +86,40 @@ function ProfileView() {
         {/* Skills */}
         <div className="mt-5">
           <h2 className="text-xl text-[#111827] font-medium">Skills</h2>
-          <div className="my-4">
-            {profile?.skills.map((skill, index) => {
-              const category = Object.keys(skill)[0];
-              const techSkill = skill[category];
-              return (
-                <div key={index} className="mt-4">
-                  <h2 className="text-md font-medium capitalize">{category}</h2>
-                  <div className="flex gap-2 mr-4">{techSkill.join(",")}</div>
-                </div>
-              );
-            })}
+          <div className="my-4 space-y-4">
+            {Array.isArray(profile?.skills) &&
+              profile.skills.map((skill, index) => {
+                if (typeof skill === "object" && skill !== null) {
+                  const category = Object.keys(skill)[0];
+                  const techSkills = skill[category];
+
+                  return (
+                    <div key={index}>
+                      <h2 className="text-md font-medium capitalize mb-2">
+                        {category}
+                      </h2>
+                      <div className="flex flex-wrap gap-2">
+                        {techSkills.map((s: string, i: number) => (
+                          <span
+                            key={i}
+                            className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full"
+                          >
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div key={index} className="flex w-full gap-2">
+                    <span className="bg-gray-200 text-sm px-3 py-1 rounded-full">
+                      {skill}
+                    </span>
+                  </div>
+                );
+              })}
           </div>
         </div>
         <hr />
