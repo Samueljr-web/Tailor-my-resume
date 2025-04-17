@@ -24,7 +24,9 @@ export default function NavBar() {
       <div>
         <Link href={"/"}>
           {" "}
-          <h2 className="text-[#111827] text-2xl font-bold">ResuTailor</h2>
+          <h2 className="text-[#111827] text-lg md:text-2xl font-bold">
+            ResuTailor
+          </h2>
         </Link>
       </div>
 
@@ -51,7 +53,10 @@ export default function NavBar() {
           </div>
         )}
         {!isAuthenticated && (
-          <Link href={"/signin"} className="py-3 px-5 bg-[#1F2937] text-white">
+          <Link
+            href={"/signin"}
+            className="py-2 px-3 text-lg md:text-xl md:py-3 md:px-5 bg-[#1F2937] text-white"
+          >
             Get Started
           </Link>
         )}
