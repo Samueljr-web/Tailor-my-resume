@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+body {
+  background: #f9fafb;
+}
 .input {
   padding: 5px;
   border: 1px solid;

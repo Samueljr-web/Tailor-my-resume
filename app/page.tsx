@@ -5,7 +5,7 @@ import HeroSection from "@/features/landing/heroSection";
 
 export default function Home() {
   return (
-    <div className="bg-[#F9FAFB] h-screen">
+    <div className=" h-screen">
       {/* <NavBar /> */}
       <HeroSection />
     </div>
