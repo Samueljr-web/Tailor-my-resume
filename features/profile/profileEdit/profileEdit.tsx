@@ -51,24 +51,30 @@ function ProfileEdit() {
     field: keyof WorkExperience,
     value: string
   ) => {
-    const updatedExperience = [...profile.workExperience];
+    const updatedExperience = [...profile.user.workExperience];
     updatedExperience[index] = {
       ...updatedExperience[index],
       [field]: value,
     };
-    setProfile({ ...profile, workExperience: updatedExperience });
+    setProfile({
+      ...profile,
+      user: { ...profile.user, workExperience: updatedExperience },
+    });
   };
   const handleDeleteExperience = (index: number) => {
-    const updatedExperience = profile.workExperience.filter(
+    const updatedExperience = profile.user.workExperience.filter(
       (_, i) => i !== index
     );
-    setProfile({ ...profile, workExperience: updatedExperience });
+    setProfile({
+      ...profile,
+      user: { ...profile.user, workExperience: updatedExperience },
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!profile.jobTitle || !profile.yearsOfExperience) {
+    if (!profile.user.jobTitle || !profile.user.yearsOfExperience) {
       toast.error("Job Title and Years of Experience are required.");
       return;
     }
@@ -101,35 +107,35 @@ function ProfileEdit() {
             <input
               className="input"
               name="firstName"
-              value={profile.firstName}
+              value={profile.user.firstName}
               onChange={handleInputChange}
               placeholder="First Name"
             />
             <input
               className="input"
               name="lastName"
-              value={profile.lastName}
+              value={profile.user.lastName}
               onChange={handleInputChange}
               placeholder="Last Name"
             />
             <input
               className="input"
               name="phoneNumber"
-              value={profile.phoneNumber}
+              value={profile.user.phoneNumber}
               onChange={handleInputChange}
               placeholder="Phone Number"
             />
             <input
               className="input"
               name="jobTitle"
-              value={profile.jobTitle}
+              value={profile.user.jobTitle}
               onChange={handleInputChange}
               placeholder="Job Title"
             />
             <input
               className="input"
               name="linkedinUrl"
-              value={profile.linkedinUrl}
+              value={profile.user.linkedinUrl}
               onChange={handleInputChange}
               placeholder="LinkedIn URL"
             />
@@ -137,7 +143,7 @@ function ProfileEdit() {
               className="input outline-none border"
               type="text"
               name="address"
-              value={profile.address}
+              value={profile.user.address}
               onChange={handleInputChange}
               placeholder="Address"
             />
@@ -145,7 +151,7 @@ function ProfileEdit() {
               className="input outline-none border"
               type="number"
               name="yearsOfExperience"
-              value={profile.yearsOfExperience}
+              value={profile.user.yearsOfExperience}
               onChange={handleInputChange}
               placeholder="Years Of Experience"
             />
@@ -153,7 +159,7 @@ function ProfileEdit() {
               className="input outline-none border"
               type="text"
               name="portfolioUrl"
-              value={profile.portfolioUrl}
+              value={profile.user.portfolioUrl}
               onChange={handleInputChange}
               placeholder="Portfolio URL"
             />
@@ -162,7 +168,7 @@ function ProfileEdit() {
           <div>
             <h2 className="text-2xl font-bold mb-4">Work Experience</h2>
 
-            {profile.workExperience?.map((exp, index) => (
+            {profile.user.workExperience?.map((exp, index) => (
               <div
                 key={index}
                 className="relative grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 border p-4 rounded-lg bg-gray-50"
@@ -221,15 +227,18 @@ function ProfileEdit() {
               onClick={() =>
                 setProfile({
                   ...profile,
-                  workExperience: [
-                    ...profile.workExperience,
-                    {
-                      CompanyName: "",
-                      Position: "",
-                      startDate: "",
-                      endDate: "",
-                    },
-                  ],
+                  user: {
+                    ...profile.user,
+                    workExperience: [
+                      ...profile.user.workExperience,
+                      {
+                        CompanyName: "",
+                        Position: "",
+                        startDate: "",
+                        endDate: "",
+                      },
+                    ],
+                  },
                 })
               }
             >
@@ -237,9 +246,12 @@ function ProfileEdit() {
             </button>
           </div>
           <SkillsSection
-            skills={profile.skills}
+            skills={profile.user.skills}
             setSkills={(newSkills) =>
-              setProfile({ ...profile, skills: newSkills })
+              setProfile({
+                ...profile,
+                user: { ...profile.user, skills: newSkills },
+              })
             }
           />
 
@@ -250,13 +262,16 @@ function ProfileEdit() {
               <input
                 className="input"
                 name="school"
-                value={profile.education?.school}
+                value={profile.user.education?.school}
                 onChange={(e) =>
                   setProfile({
                     ...profile,
-                    education: {
-                      ...profile.education,
-                      school: e.target.value,
+                    user: {
+                      ...profile.user,
+                      education: {
+                        ...profile.user.education,
+                        school: e.target.value,
+                      },
                     },
                   })
                 }
@@ -266,13 +281,16 @@ function ProfileEdit() {
               <input
                 className="input"
                 name="programme"
-                value={profile.education?.programme}
+                value={profile.user.education?.programme}
                 onChange={(e) =>
                   setProfile({
                     ...profile,
-                    education: {
-                      ...profile.education,
-                      programme: e.target.value,
+                    user: {
+                      ...profile.user,
+                      education: {
+                        ...profile.user.education,
+                        programme: e.target.value,
+                      },
                     },
                   })
                 }
@@ -282,9 +300,12 @@ function ProfileEdit() {
           </div>
 
           <CertificateSection
-            certificate={profile.certifications}
+            certificate={profile.user.certifications}
             setCertificate={(newCert) =>
-              setProfile({ ...profile, certifications: newCert })
+              setProfile({
+                ...profile,
+                user: { ...profile.user, certifications: newCert },
+              })
             }
           />
 
