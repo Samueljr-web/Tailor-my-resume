@@ -59,7 +59,7 @@ function ProfileView() {
           </Link>
         </div>
 
-        <h2 className="text-xl capitalize mt-3">{profile?.jobTitle}</h2>
+        <h2 className="text-xl capitalize mt-3">{profile?.user.jobTitle}</h2>
 
         <div className="my-5">
           <h2 className="text-xl  text-[#111827] font-medium">
@@ -73,7 +73,9 @@ function ProfileView() {
               <Link
                 className="text-blue-500"
                 target="_blank"
-                href={`https://${profile?.linkedinUrl || "linkedin.com/in/"}`}
+                href={`https://${
+                  profile?.user.linkedinUrl || "linkedin.com/in/"
+                }`}
               >
                 {profile?.user.linkedinUrl || "https://linkedin.com/in/"}
               </Link>
@@ -148,7 +150,7 @@ function ProfileView() {
         <div className="mt-5">
           <h2 className="text-xl text-[#111827] font-medium">Education</h2>
           <div>
-            {[profile?.education].map((edu, index) => (
+            {[profile?.user.education].map((edu, index) => (
               <div key={index} className="mt-4">
                 <h2 className="text-lg font-medium capitalize">
                   {edu?.programme}
