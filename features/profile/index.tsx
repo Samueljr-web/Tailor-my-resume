@@ -67,19 +67,19 @@ function ProfileView() {
           </h2>
 
           <div className="mt-5 flex flex-col gap-3">
-            <h2>{profile?.email || "email"}</h2>
-            <h2>{profile?.address || "address"}</h2>
+            <h2>{profile?.user.email || "email"}</h2>
+            <h2>{profile?.user.address || "address"}</h2>
             <h2>
               <Link
                 className="text-blue-500"
                 target="_blank"
                 href={`https://${profile?.linkedinUrl || "linkedin.com/in/"}`}
               >
-                {profile?.linkedinUrl || "https://linkedin.com/in/"}
+                {profile?.user.linkedinUrl || "https://linkedin.com/in/"}
               </Link>
             </h2>
 
-            <h2>{profile?.yearsOfExperience || 0}+ Years Experience</h2>
+            <h2>{profile?.user.yearsOfExperience || 0}+ Years Experience</h2>
           </div>
         </div>
         <hr />
@@ -87,8 +87,8 @@ function ProfileView() {
         <div className="mt-5">
           <h2 className="text-xl text-[#111827] font-medium">Skills</h2>
           <div className="my-4 space-y-4">
-            {Array.isArray(profile?.skills) &&
-              profile.skills.map((skill, index) => {
+            {Array.isArray(profile?.user.skills) &&
+              profile.user.skills.map((skill, index) => {
                 if (typeof skill === "object" && skill !== null) {
                   const category = Object.keys(skill)[0];
                   const techSkills = skill[category];
@@ -129,7 +129,7 @@ function ProfileView() {
             Work Experience
           </h2>
           <div className="my-4">
-            {profile?.workExperience.map((work, index) => (
+            {profile?.user.workExperience.map((work, index) => (
               <div key={index} className="mt-4">
                 <h2 className="text-lg font-medium capitalize">
                   {work.Position}
