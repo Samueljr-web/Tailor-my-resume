@@ -250,7 +250,10 @@ function ProfileEdit() {
             setSkills={(newSkills) =>
               setProfile({
                 ...profile,
-                user: { ...profile.user, skills: newSkills },
+                user: {
+                  ...profile.user,
+                  skills: profile.user.skills || newSkills,
+                },
               })
             }
           />
