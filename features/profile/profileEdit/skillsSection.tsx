@@ -185,7 +185,7 @@ export default function SkillsSection({
             <div key={index} className="flex items-center gap-2 mb-2">
               <input
                 className="input flex-1"
-                value={profile.skill}
+                // value={profile.skill}
                 onChange={(e) =>
                   handleUncategorizedSkillChange(index, e.target.value)
                 }
