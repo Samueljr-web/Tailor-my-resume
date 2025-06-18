@@ -6,8 +6,11 @@ import Link from "next/link";
 import React from "react";
 import { BiUserCircle } from "react-icons/bi";
 import { MdLogout } from "react-icons/md";
+import Logo from "./logo";
+import { usePathname } from "next/navigation";
 
 export default function NavBar() {
+  const currentPath = usePathname();
   const { _hasHydrated, isAuthenticated, logout } = useAuthStore();
   const setProfile = useProfileStore((state) => state.setProfile);
 
@@ -20,20 +23,32 @@ export default function NavBar() {
   };
 
   return (
-    <div className="flex items-center justify-between py-4 px-5">
+    <div className="shadow-md flex items-center justify-between py-4 px-[58px]">
       <div>
         <Link href={"/"}>
-          {" "}
-          <h2 className="text-[#111827] text-lg md:text-2xl font-bold">
-            ResuTailor
-          </h2>
+          <Logo />
         </Link>
       </div>
 
-      <nav className="hidden md:flex items-center gap-5">
-        <Link href={"/#"}>Home</Link>
-        <Link href={"/#"}>Pricing</Link>
-        <Link href={"/#"}>FAQs</Link>
+      <nav className="hidden md:flex items-center text-[14px] text-[#121212] gap-5">
+        <Link
+          href={"/#"}
+          className={currentPath === "/" ? " text-[#2B7FFF]" : ""}
+        >
+          Home
+        </Link>
+        <Link
+          href={"/#"}
+          className={currentPath === "/pricing" ? " text-[#2B7FFF]" : ""}
+        >
+          Pricing
+        </Link>
+        <Link
+          href={"/#"}
+          className={currentPath === "builder" ? " text-[#2B7FFF]" : ""}
+        >
+          Resume Builder
+        </Link>
       </nav>
 
       <div>
@@ -53,12 +68,20 @@ export default function NavBar() {
           </div>
         )}
         {!isAuthenticated && (
-          <Link
-            href={"/signin"}
-            className="py-2 px-3 text-lg md:text-xl md:py-3 md:px-5 bg-[#1F2937] text-white"
-          >
-            Get Started
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              href={"/signup"}
+              className="w-[134px] text-center py-2 bg-[linear-gradient(97deg,_#101828_14.11%,_#2B7FFF_187.12%)] rounded-full text-[16px] md:py-3 text-white"
+            >
+              Signup
+            </Link>
+            <Link
+              href={"/signin"}
+              className="w-[134px] text-center py-2 bg-[linear-gradient(97deg,_#101828_14.11%,_#2B7FFF_187.12%)] rounded-full text-[16px] md:py-3 text-white"
+            >
+              Login
+            </Link>
+          </div>
         )}
       </div>
     </div>
