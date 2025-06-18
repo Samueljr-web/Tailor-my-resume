@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import NavBar from "./components/navbar";
 // import Script from "next/script";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const poppins = Poppins({
+  weight: ["100", "400", "500", "600", "700"],
   subsets: ["latin"],
 });
 
@@ -28,9 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${poppins.className}`}>
         {/* <Script
           src="/nutrient-viewer/nutrient-viewer.js"
           strategy="beforeInteractive"
@@ -39,8 +32,16 @@ export default function RootLayout({
         <div>
           <Toaster />
         </div>
-
-        {children}
+        <main className="relative overflow-hidden">
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            <div className="absolute left-[225px] top-[-40px] w-full h-full">
+              <div className="absolute w-[1109px] h-40 left-[-318px] top-[479px] bg-gradient-to-b from-blue-500 to-gray-900 rounded-full blur-[48px]" />
+              <div className="absolute w-[1440px] h-40 left-[-129.5px] top-[264.5px] bg-gradient-to-b from-gray-900 to-blue-500 rounded-full blur-[48px]" />
+              <div className="absolute w-[1091px] h-40 left-[349px] top-[20px] bg-gradient-to-b from-blue-500 to-blue-500 rounded-full blur-[48px]" />
+            </div>
+          </div>
+          {children}
+        </main>
       </body>
     </html>
   );
