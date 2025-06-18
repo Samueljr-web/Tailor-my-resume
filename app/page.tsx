@@ -5,7 +5,7 @@ import HeroSection from "@/features/landing/heroSection";
 
 export default function Home() {
   return (
-    <div className=" h-screen">
+    <div className="min-h-screen">
       {/* <NavBar /> */}
       <HeroSection />
     </div>
