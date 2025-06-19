@@ -43,7 +43,7 @@ function ProfileEdit() {
   }
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setProfile({ ...profile, [name]: value });
+    setProfile({ ...profile, user: { ...profile.user, [name]: value } });
   };
 
   const handleExperienceChange = (
@@ -82,7 +82,7 @@ function ProfileEdit() {
     setLoading(true);
 
     try {
-      const res = await apiClient.put("/profile", profile);
+      const res = await apiClient.put("/profile", profile.user);
       if (res.status === 200) {
         toast.success("Profile updated!");
       }
