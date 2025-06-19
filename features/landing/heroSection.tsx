@@ -3,7 +3,7 @@ import React from "react";
 function HeroSection() {
   return (
     <div className="flex items-center mt-[10rem] justify-center relative z-10">
-      <div className="w-[1440px] h-[776px] ">
+      <div className="w-[1440px]">
         <div className="flex flex-col justify-start items-center">
           <div className="w-64 p-2 text-center bg-[#10182899] rounded-full text-neutral-50 text-sm font-medium">
             <span>AI-Powered Resume Analysis</span>
