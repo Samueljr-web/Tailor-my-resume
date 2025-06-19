@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import NavBar from "./components/navbar";
+import Footer from "./components/footer";
 // import Script from "next/script";
 
 const poppins = Poppins({
@@ -42,6 +43,7 @@ export default function RootLayout({
           </div>
           {children}
         </main>
+        <Footer />
       </body>
     </html>
   );
