@@ -1,6 +1,7 @@
 // import Image from "next/image";
 
 import HeroSection from "@/features/landing/heroSection";
+import HowItWorks from "@/features/landing/howItWorks";
 // import NavBar from "./components/navbar";
 
 export default function Home() {
@@ -8,6 +9,7 @@ export default function Home() {
     <div className="min-h-screen">
       {/* <NavBar /> */}
       <HeroSection />
+      <HowItWorks />
     </div>
   );
 }
