@@ -12,6 +12,7 @@ import SkillsSection from "./skillsSection";
 import ProfileSkeleton from "./profileSkeleton";
 import Breadcrumb from "@/app/components/breadCrumb";
 import CertificateSection from "./certificateSection";
+import EducationSec from "./educationSection";
 
 function ProfileEdit() {
   const { _hasHydrated, profile, setProfile } = useProfileStore();
@@ -258,50 +259,19 @@ function ProfileEdit() {
             }
           />
 
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Education</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                className="input"
-                name="school"
-                value={profile.user.education?.school}
-                onChange={(e) =>
-                  setProfile({
-                    ...profile,
-                    user: {
-                      ...profile.user,
-                      education: {
-                        ...profile.user.education,
-                        school: e.target.value,
-                      },
-                    },
-                  })
-                }
-                placeholder="School"
-              />
-
-              <input
-                className="input"
-                name="programme"
-                value={profile.user.education?.programme}
-                onChange={(e) =>
-                  setProfile({
-                    ...profile,
-                    user: {
-                      ...profile.user,
-                      education: {
-                        ...profile.user.education,
-                        programme: e.target.value,
-                      },
-                    },
-                  })
-                }
-                placeholder="Programme"
-              />
-            </div>
-          </div>
-
+          <EducationSec
+            education={
+              Array.isArray(profile.user.education)
+                ? profile.user.education
+                : [profile.user.education]
+            }
+            setEducation={(newEdu) =>
+              setProfile({
+                ...profile,
+                user: { ...profile.user, education: newEdu },
+              })
+            }
+          />
           <CertificateSection
             certificate={profile.user.certifications}
             setCertificate={(newCert) =>

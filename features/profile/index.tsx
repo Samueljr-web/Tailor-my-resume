@@ -150,12 +150,12 @@ function ProfileView() {
         <div className="mt-5">
           <h2 className="text-xl text-[#111827] font-medium">Education</h2>
           <div>
-            {[profile?.user?.education].map((edu, index) => (
+            {profile?.user?.education?.map((edu, index) => (
               <div key={index} className="mt-4">
                 <h2 className="text-lg font-medium capitalize">
-                  {edu?.programme}
+                  {edu.programme}
                 </h2>
-                <h2>{edu?.school}</h2>
+                <h2>{edu.school}</h2>
               </div>
             ))}
           </div>

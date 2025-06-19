@@ -11,10 +11,7 @@ interface CertificateSectionProps {
   setCertificate: (updatedCertificates: Certificate[]) => void;
 }
 
-function CertificateSection({
-  certificate,
-  setCertificate,
-}: CertificateSectionProps) {
+function Certificate({ certificate, setCertificate }: CertificateSectionProps) {
   const handleChange = (
     index: number,
     field: keyof Certificate,
@@ -79,4 +76,4 @@ function CertificateSection({
   );
 }
 
-export default CertificateSection;
+export default Certificate;
