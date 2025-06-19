@@ -26,7 +26,7 @@ export default function NavBar() {
     <div className="shadow-md flex items-center justify-between py-4 px-[58px]">
       <div>
         <Link href={"/"}>
-          <Logo />
+          <Logo weight={"700"} />
         </Link>
       </div>
 
