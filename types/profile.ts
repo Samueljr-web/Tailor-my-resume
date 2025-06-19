@@ -39,6 +39,6 @@ export interface User {
   skills: Skill[] | string[];
   yearsOfExperience: number;
   phoneNumber: string;
-  education: Education;
+  education: Education[];
   certifications: Certificate[];
 }
