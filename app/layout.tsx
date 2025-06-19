@@ -41,7 +41,7 @@ export default function RootLayout({
               <div className="absolute w-[1091px] h-40 left-[349px] top-[20px] bg-gradient-to-b from-blue-500 to-blue-500 rounded-full blur-[48px]" />
             </div>
           </div>
-          {children}
+          <div className="relative z-10">{children}</div>
         </main>
         <Footer />
       </body>
