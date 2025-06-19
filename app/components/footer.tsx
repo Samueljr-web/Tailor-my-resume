@@ -37,9 +37,9 @@ function Footer() {
     },
   ];
   return (
-    <div className="w-full  bg-[linear-gradient(97deg,_#101828_14.11%,_#2B7FFF_187.12%)] py-[49px] px-18 mt-[64px]">
-      <div className="flex justify-between">
-        <div className="flex">
+    <div className="w-full bg-[linear-gradient(97deg,_#101828_14.11%,_#2B7FFF_187.12%)] py-[49px] md:px-18 px-4 mt-[64px]">
+      <div className="flex  justify-between">
+        <div className="flex md:flex-row flex-col">
           <div className="mr-8">
             <Logo light={true} weight={"400"} />
             <h4 className="text-[16px] text-[#99A1AF] w-[270px] mt-[20px]">
@@ -47,7 +47,7 @@ function Footer() {
             </h4>
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col md:mt-0 mt-4">
             <h2 className="text-white">PRODUCT</h2>
             {productLinks.map((link, index) => (
               <Link
@@ -59,7 +59,7 @@ function Footer() {
               </Link>
             ))}
           </div>
-          <div className="ml-[100px] flex flex-col">
+          <div className="md:ml-[100px] md:mt-0 mt-4 flex flex-col">
             <h2 className="text-white">COMPANY</h2>
             {companyLinks.map((link, index) => (
               <Link
@@ -72,7 +72,7 @@ function Footer() {
             ))}
           </div>
         </div>
-        <div>
+        <div className="md:block hidden">
           <Image
             src={"/assets/logo-light.svg"}
             alt="logo-light"

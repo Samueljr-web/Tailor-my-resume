@@ -27,7 +27,7 @@ function Logo({ light, weight }: LogoProps) {
 
       <h2
         style={{ fontWeight: weight, color: light ? "#fff" : "#101828" }}
-        className="text-2xl  tracking-[2.4px] -ml-1"
+        className="md:flex hidden text-2xl tracking-[2.4px] -ml-1"
       >
         Resu<span className="text-[#2B7FFF]">Tailor</span>
       </h2>
