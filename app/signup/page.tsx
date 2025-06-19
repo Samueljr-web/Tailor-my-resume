@@ -15,6 +15,7 @@ type SignUpProps = {
   lastName: string;
   email: string;
   password: string;
+  confirmPassword: string;
   phoneNumber: number;
 };
 function Page() {
@@ -22,7 +23,10 @@ function Page() {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<SignUpProps>();
+  const password = watch("password");
+
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
 
@@ -122,7 +126,7 @@ function Page() {
             className={`py-4 p-2 ${
               errors.password ? "outline-red-400" : ""
             }  mt-3 rounded-lg text-sm  border border-[#CBD5E1]`}
-            placeholder="create password"
+            placeholder="Create password"
             type="password"
             {...register("password", {
               required: "password is required",
@@ -137,16 +141,14 @@ function Page() {
           <label className="text-left">Retype Password</label>
           <input
             className={`py-4 p-2 ${
-              errors.password ? "outline-red-400" : ""
+              errors.confirmPassword ? "outline-red-400" : ""
             }  mt-3 rounded-lg text-sm  border border-[#CBD5E1]`}
             placeholder="Retype Password"
             type="password"
-            {...register("password", {
-              required: "password is required",
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters",
-              },
+            {...register("confirmPassword", {
+              required: "Please confirm your password",
+              validate: (value) =>
+                value === password || "Passwords do not match",
             })}
           />
         </div>
