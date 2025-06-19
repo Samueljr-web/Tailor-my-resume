@@ -9,6 +9,7 @@ import React, { Suspense } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Spinner from "../components/spinner";
+import { FcGoogle } from "react-icons/fc";
 
 type SignInProps = {
   email: string;
@@ -52,44 +53,80 @@ function SignIn() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-[#F9FAFB]">
-      <h2 className="text-2xl text-[#111827]">Welcome back!</h2>
+    <div className=" text-center mt-6 max-w-3xl mx-auto bg-white p-6 shadow rounded-[20px]">
+      <h2 className="text-2xl text-[#111827]">Login</h2>
+      <h4 className="text-[#12121280] mt-4">
+        Welcome back, you’ve been missed!
+      </h4>
+      <button
+        disabled={loading}
+        className="cursor-pointer text-center mt-12  border border-[#CBD5E1] w-[500px] py-4 disabled:opacity-70 rounded-lg"
+      >
+        <span className="flex  items-center justify-center gap-2">
+          <i className="text-3xl">
+            <FcGoogle />
+          </i>
+          Sign In with Google
+        </span>
+      </button>
+
+      <div className="flex w-full items-center mt-8 gap-2 ">
+        <div className="w-full bg-[#CBD5E1] h-[1px]"></div> OR
+        <div className="w-full bg-[#CBD5E1] h-[1px]"></div>
+      </div>
+
       <div className="mt-10">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-center flex-col"
+          className="flex items-center justify-center w-full flex-col gap-6 px-[29px] text-[16px]"
         >
-          <input
-            className="p-2 w-[300px] border"
-            placeholder="johndoe@mail.com"
-            type="email"
-            {...register("email", {
-              required: "Email is required",
-            })}
-          />
-          <input
-            className="p-2 w-[300px] border mt-4"
-            placeholder="********"
-            type="password"
-            {...register("password", {
-              required: "Password is required",
-            })}
-          />
-          <div className="w-[300px] mt-2 text-left text-red-500 text-sm">
-            {(errors.email?.type === "required" ||
-              errors.password?.type === "required") && (
-              <p>All fields are required</p>
-            )}
+          <div className="flex flex-col w-full">
+            <label className="text-left">Email</label>
+            <input
+              className={`py-4 p-2 ${
+                errors.email ? "outline-red-400" : ""
+              }  mt-3 rounded-lg text-sm  border border-[#CBD5E1]`}
+              placeholder="Enter your email address"
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+              })}
+            />
+          </div>
+          <div className="flex flex-col w-full">
+            <label className="text-left">Password</label>
+            <input
+              className={`py-4 p-2 ${
+                errors.password ? "outline-red-400" : ""
+              }  mt-3 rounded-lg text-sm border border-[#CBD5E1]`}
+              placeholder="Enter password"
+              type="password"
+              {...register("password", {
+                required: "Password is required",
+              })}
+            />
+          </div>
+          <div className="flex w-full justify-between">
+            <div className="flex items-center gap-1">
+              <input type="checkbox" id="rmcheck" />
+              <label htmlFor="rmcheck">Remember me?</label>
+            </div>
+            <div>
+              {" "}
+              <Link className="text-[#121212]" href={"/signup"}>
+                Forgot Password?
+              </Link>
+            </div>
           </div>
           <button
             disabled={loading}
-            className="cursor-pointer flex items-center justify-center w-[300px] mt-4 bg-[#1F2937] p-2 text-white disabled:opacity-70"
+            className="cursor-pointer flex justify-center rounded-[8px] w-full mt-4 bg-gradient-to-r from-[rgba(16,24,40,0.5)] to-[rgba(43,127,255,0.5)] py-4 text-[#FFFFFF80]"
           >
-            {loading ? <Spinner /> : "Sign in"}
+            {loading ? <Spinner /> : "Login"}
           </button>
-          <h2 className="mt-2">
+          <h2 className="mt-2 text-[#12121280]">
             Don’t have an account?{" "}
-            <Link className="underline" href={"/signup"}>
+            <Link className="text-[#2B7FFF]" href={"/signup"}>
               Signup
             </Link>
           </h2>

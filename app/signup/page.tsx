@@ -8,6 +8,7 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Spinner from "../components/spinner";
+import { FcGoogle } from "react-icons/fc";
 
 type SignUpProps = {
   firstName: string;
@@ -48,23 +49,52 @@ function Page() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-[#F9FAFB]">
-      <div>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex items-center justify-center flex-col "
-        >
-          <div className="flex w-[300px] gap-2">
+    <div className=" text-center mt-6 max-w-3xl mx-auto bg-white p-6 shadow rounded-[20px]">
+      <h2 className="text-2xl text-[#111827]">Sign up</h2>
+      <h4 className="text-[#12121280] mt-4">
+        Create an account to begin generating Resumes
+      </h4>
+
+      <button
+        disabled={loading}
+        className="cursor-pointer text-center mt-12  border border-[#CBD5E1] w-[500px] py-4 disabled:opacity-70 rounded-lg"
+      >
+        <span className="flex  items-center justify-center gap-2">
+          <i className="text-3xl">
+            <FcGoogle />
+          </i>
+          Sign Up with Google
+        </span>
+      </button>
+
+      <div className="flex w-full items-center mt-8 gap-2 ">
+        <div className="w-full bg-[#CBD5E1] h-[1px]"></div> OR
+        <div className="w-full bg-[#CBD5E1] h-[1px]"></div>
+      </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex items-center justify-center w-full flex-col gap-6 px-[29px] text-[16px] mt-5"
+      >
+        <div className="flex w-full gap-2">
+          <div className="flex flex-col w-full">
+            <label className="text-left">First name</label>
             <input
-              className="p-2 w-full border"
-              placeholder="john"
+              className={`py-4 p-2 ${
+                errors.firstName ? "outline-red-400" : ""
+              }  mt-3 rounded-lg text-sm  border border-[#CBD5E1]`}
+              placeholder="Enter your first name"
               type="text"
               {...register("firstName", {
                 required: "required",
               })}
             />
+          </div>
+          <div className="flex flex-col w-full">
+            <label className="text-left">Last name</label>
             <input
-              className="p-2 w-full border "
+              className={`py-4 p-2 ${
+                errors.lastName ? "outline-red-400" : ""
+              }  mt-3 rounded-lg text-sm  border border-[#CBD5E1]`}
               placeholder="doe"
               type="text"
               {...register("lastName", {
@@ -72,59 +102,75 @@ function Page() {
               })}
             />{" "}
           </div>
-          <div className="flex flex-col gap-4 mt-4">
-            <input
-              className="p-2 w-[300px] border "
-              placeholder="johndoe@mail.com"
-              type="email"
-              {...register("email", {
-                required: "email is required",
-              })}
-            />
-            <input
-              className="p-2 w-[300px] border "
-              placeholder="********"
-              type="password"
-              {...register("password", {
-                required: "password is required",
-                minLength: {
-                  value: 8,
-                  message: "Password must be at least 8 characters",
-                },
-              })}
-            />
-            <input
-              className="p-2 w-[300px] border "
-              placeholder="+44 (8000000000)"
-              type="tel"
-              {...register("phoneNumber", {
-                required: "phone is required",
-              })}
-            />
-          </div>
+        </div>
+        <div className="flex flex-col w-full gap-2">
+          <label className="text-left">Email</label>
+          <input
+            className={`py-4 p-2 ${
+              errors.email ? "outline-red-400" : ""
+            }  mt-3 rounded-lg text-sm  border border-[#CBD5E1]`}
+            placeholder="Enter your email address"
+            type="email"
+            {...register("email", {
+              required: "email is required",
+            })}
+          />
+        </div>
+        <div className="flex flex-col w-full gap-2">
+          <label className="text-left">Password</label>
+          <input
+            className={`py-4 p-2 ${
+              errors.password ? "outline-red-400" : ""
+            }  mt-3 rounded-lg text-sm  border border-[#CBD5E1]`}
+            placeholder="create password"
+            type="password"
+            {...register("password", {
+              required: "password is required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+            })}
+          />
+        </div>
+        <div className="flex flex-col w-full gap-2">
+          <label className="text-left">Retype Password</label>
+          <input
+            className={`py-4 p-2 ${
+              errors.password ? "outline-red-400" : ""
+            }  mt-3 rounded-lg text-sm  border border-[#CBD5E1]`}
+            placeholder="Retype Password"
+            type="password"
+            {...register("password", {
+              required: "password is required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+            })}
+          />
+        </div>
 
-          <div className="w-full text-red-500 text-left text-sm">
-            {(errors.email || errors.password) && (
-              <h2>All fields are required</h2>
-            )}
-            {errors.password?.type === "minLength" && (
-              <div>{errors.password.message}</div>
-            )}
-          </div>
-          <button
-            disabled={loading}
-            className="flex justify-center cursor-pointer w-[300px] mt-4 bg-[#1F2937] p-2 text-white disabled:opacity-70"
-          >
-            {loading ? <Spinner /> : "Sign up"}
-          </button>
-          <h2>
-            dont have an account?{" "}
-            <Link className="underline" href={"/signin"}>
-              Signin
-            </Link>
-          </h2>
-        </form>
-      </div>
+        <div className="flex items-center justify-start w-full gap-2">
+          <input type="checkbox" id="agree" />
+          <label htmlFor="agree" className="text-[12px]">
+            I agree to all the Terms and Privacy policy{" "}
+          </label>
+        </div>
+
+        <button
+          disabled={loading}
+          className="cursor-pointer flex justify-center rounded-[8px] w-full mt-4 bg-gradient-to-r from-[rgba(16,24,40,0.5)] to-[rgba(43,127,255,0.5)] py-4 text-[#FFFFFF80]"
+        >
+          {loading ? <Spinner /> : "Sign up"}
+        </button>
+        <h2>
+          dont have an account?{" "}
+          <Link className="text-[#2B7FFF]" href={"/signin"}>
+            Signin
+          </Link>
+        </h2>
+      </form>
     </div>
   );
 }

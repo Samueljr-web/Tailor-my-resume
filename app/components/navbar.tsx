@@ -4,7 +4,6 @@ import useAuthStore from "@/store/useAuthStore";
 import useProfileStore from "@/store/useProfileStore";
 import Link from "next/link";
 import React from "react";
-import { BiUserCircle } from "react-icons/bi";
 import { MdLogout } from "react-icons/md";
 import Logo from "./logo";
 import { usePathname } from "next/navigation";
@@ -13,6 +12,7 @@ export default function NavBar() {
   const currentPath = usePathname();
   const { _hasHydrated, isAuthenticated, logout } = useAuthStore();
   const setProfile = useProfileStore((state) => state.setProfile);
+  const { profile } = useProfileStore();
 
   if (!_hasHydrated) {
     return null;
@@ -58,8 +58,8 @@ export default function NavBar() {
               {user?.email}
             </span> */}
             <Link href={"/profile"}>
-              <span>
-                <BiUserCircle className="text-3xl" />
+              <span className="text-[#2B7FFF]">
+                Welcome, {profile?.user.firstName}
               </span>
             </Link>
             <button onClick={() => onLogout()} className=" text-red-500">
