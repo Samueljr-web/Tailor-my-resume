@@ -1,7 +1,12 @@
 import Image from "next/image";
 import React from "react";
 
-function Logo({ light, weight }: any) {
+interface LogoProps {
+  light: boolean;
+  weight: string;
+}
+
+function Logo({ light, weight }: LogoProps) {
   return (
     <div className="cursor-pointer flex items-baseline gap-0">
       {light ? (
