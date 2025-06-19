@@ -41,7 +41,7 @@ function ProfileView() {
     return <div className="text-center mt-10">Loading...</div>;
   }
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="">
       <div className="ml-5 my-4 flex justify-between">
         <Breadcrumb paths={breadcrumbPaths} />
         <Link href={"/generate"} className="py-2 px-2 bg-[#1F2937] text-white">

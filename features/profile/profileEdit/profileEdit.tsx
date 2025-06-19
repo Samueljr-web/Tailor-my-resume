@@ -95,7 +95,7 @@ function ProfileEdit() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="">
       <div className="ml-5 my-4 flex items-center space-x-2">
         <Breadcrumb paths={breadcrumbPaths} />
       </div>
