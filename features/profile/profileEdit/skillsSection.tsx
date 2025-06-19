@@ -1,7 +1,7 @@
 "use client";
 
 import { BiX } from "react-icons/bi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Skill {
   [category: string]: string[];
@@ -12,13 +12,21 @@ type SkillsSectionProps = {
   setSkills: (updatedSkills: Skill[] | string[]) => void;
 };
 
+const isArrayOfStrings = (arr: unknown[]): boolean =>
+  arr.length === 0 || typeof arr[0] === "string";
+
+const inferCategorized = (s: Skill[] | string[]) =>
+  Array.isArray(s) && !isArrayOfStrings(s);
+
 export default function SkillsSection({
   skills,
   setSkills,
 }: SkillsSectionProps) {
-  const [isCategorized, setIsCategorized] = useState(
-    Array.isArray(skills) ? false : true
-  );
+  const [isCategorized, setIsCategorized] = useState(inferCategorized(skills));
+
+  useEffect(() => {
+    setIsCategorized(inferCategorized(skills));
+  }, [skills]);
 
   const toggleSkillType = () => {
     if (isCategorized) {
@@ -128,7 +136,6 @@ export default function SkillsSection({
                   <BiX size={18} />
                 </button>
 
-                {/* Category name */}
                 <input
                   className="input mb-3"
                   value={category}
@@ -136,18 +143,18 @@ export default function SkillsSection({
                   placeholder="Skill Category"
                 />
 
-                {/* Skills */}
                 <div className="space-y-2">
                   {items.map((item, skillIndex) => (
                     <div key={skillIndex} className="flex items-center gap-2">
                       <input
                         className="input flex-1"
-                        value={item}
+                        value={item || ""}
                         onChange={(e) =>
                           handleSkillChange(index, skillIndex, e.target.value)
                         }
-                        placeholder={`Skill ${skillIndex + 1}`}
+                        placeholder={`Skill ${skillIndex + 1 || ""}`}
                       />
+
                       <button
                         type="button"
                         onClick={() => handleRemoveSkill(index, skillIndex)}
@@ -159,7 +166,6 @@ export default function SkillsSection({
                   ))}
                 </div>
 
-                {/* Add skill */}
                 <button
                   type="button"
                   onClick={() => handleAddSkill(index)}
@@ -181,25 +187,28 @@ export default function SkillsSection({
         </>
       ) : (
         <>
-          {(skills as string[]).map((skill, index) => (
-            <div key={index} className="flex items-center gap-2 mb-2">
-              <input
-                className="input flex-1"
-                // value={profile.skill}
-                onChange={(e) =>
-                  handleUncategorizedSkillChange(index, e.target.value)
-                }
-                placeholder={`Skill ${index + 1}`}
-              />
-              <button
-                type="button"
-                onClick={() => removeUncategorizedSkill(index)}
-                className="text-gray-400 hover:text-red-500"
-              >
-                <BiX size={16} />
-              </button>
-            </div>
-          ))}
+          {Array.isArray(skills) &&
+            typeof skills[0] === "string" &&
+            (skills as string[]).map((skill, index) => (
+              <div key={index} className="flex items-center gap-2 mb-2">
+                <input
+                  className="input flex-1"
+                  value={skill || ""}
+                  onChange={(e) =>
+                    handleUncategorizedSkillChange(index, e.target.value)
+                  }
+                  placeholder={`Skill ${index + 1}`}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeUncategorizedSkill(index)}
+                  className="text-gray-400 hover:text-red-500"
+                >
+                  <BiX size={16} />
+                </button>
+              </div>
+            ))}
+
           <button
             type="button"
             onClick={addUncategorizedSkill}

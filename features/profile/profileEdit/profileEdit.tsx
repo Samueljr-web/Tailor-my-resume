@@ -246,13 +246,13 @@ function ProfileEdit() {
             </button>
           </div>
           <SkillsSection
-            skills={profile.user.skills}
+            skills={profile.user.skills || []}
             setSkills={(newSkills) =>
               setProfile({
                 ...profile,
                 user: {
                   ...profile.user,
-                  skills: profile.user.skills || newSkills,
+                  skills: newSkills,
                 },
               })
             }
